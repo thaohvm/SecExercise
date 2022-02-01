@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Giphy Party!</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="text-center">GIPHY PARTY</h1>
+    <form class="form-inline d-flex justify-content-center" id="new-form">
+      <div>
+        <input type="text" placeholder="Enter a search term" id="search-input">
+        <button type="submit" class="btn btn-secondary" id="search-btn">Search Giphy</button>
+      </div>
+    </form>
+    <div class="remove">
+      <button type="submit" class="btn btn-danger d-flex p-2" id="remove-btn">Remove Images</button>
+    </div>
+
+    <div id="search-results"></div>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>

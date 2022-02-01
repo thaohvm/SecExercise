@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boggle Board</title>
+</head>
+<body>
+    <h1>Boggle Game</h1>
+    <p>Highscore: {{ session["score"] }} </p>
+    <div><b id="timer"></b></div>
+    <div id = "score-result"></div>
+    <table>
+        <tbody>
+            {% for row in board %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form id = "word-add">
+        <input id = "guess" name = "guess" type = "text" required enable>
+        <button>Submit</button>
+    </form>
+
+    <div id="msg"></div>
+
+    <p>Words found: </p>
+    <ol id="words-found">
+    </ol>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src = "../static/boggle.js"></script>
+</body>
+</html>

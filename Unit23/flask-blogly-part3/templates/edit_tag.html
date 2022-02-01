@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{%block content%}
+
+<h1>Create a tag</h1>
+<div>
+    <form action='/tags/new', method = "post">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter a name for a tag" name="name" value="{{ tags.name }}">
+        </div>
+
+        <div>
+            <a href="/tags">Cancel</a>
+        </div>
+
+        <div>
+            <button>Edit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
