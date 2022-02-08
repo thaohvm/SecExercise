@@ -20,7 +20,7 @@ app.get('/mean', function(req, res, next) {
 
     let result = {
         operation: "mean",
-        result: calculateMean(nums)
+        value: calculateMean(nums)
     }
     return res.send(result);
 });
@@ -38,14 +38,14 @@ app.get('/median', function(req, res, next) {
 
     let result = {
       operation: "median",
-      result: calculateMedian(nums)
+      value: calculateMedian(nums)
     }
 
     return res.send(result);
 
   });
 
-  app.get('/mode', function(req, res, next) {
+app.get('/mode', function(req, res, next) {
     if (!req.query.nums) {
       throw new ExpressError('You must pass a query key of nums with a comma-separated list of numbers.', 400)
     }
@@ -58,7 +58,7 @@ app.get('/median', function(req, res, next) {
 
     let result = {
       operation: "mode",
-      result: calculateMode(nums)
+      value: calculateMode(nums)
     }
 
     return res.send(result);
@@ -68,8 +68,6 @@ app.get('/median', function(req, res, next) {
 
 app.use(function (req, res, next) {
     const err = new ExpressError("Not Found",404);
-
-
     return next(err);
   });
 
