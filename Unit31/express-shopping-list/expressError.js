@@ -1,4 +1,3 @@
-const { isModuleNamespaceObject } = require("util/types");
 
 class ExpressError extends Error {
     constructor (message, status) {
