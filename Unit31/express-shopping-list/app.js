@@ -17,9 +17,11 @@ app.use(function (req, res, next) {
 
 // Error handler
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    return res.json({
-        error : err.message,
+    let status = err.status || 500;
+    let message = err.message;
+
+    return res.status(status).json({
+        error : {message, status}
     });
 });
 
