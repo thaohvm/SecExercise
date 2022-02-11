@@ -4,7 +4,7 @@ const express = require('express');
 const app = require("./app");
 let items = require("./fakeDb");
 
-let item = { name: "lollipop", price:200 }
+let item = { name: "lollipop", price: 200 }
 
 beforeEach(function() {
     items.push(item);
@@ -17,14 +17,16 @@ afterEach(function() {
 
 /** GET /items - returns `{items: [item, ...]}` */
 
-describe("GET /items", async function () {
-    test("Gets a list of items", async function () {
-      const response = await request(app).get(`/items`);
-      const { items } = response.body;
-      expect(response.statusCode).toBe(200);
-      expect(items).toHaveLength(1);
+describe('GET /items', function() {
+    test('Get all items', async () => {
+        const resp = await request(app).get('/items');
+        expect(resp.statusCode).toBe(200);
+        expect(items).toHaveLength(1);
+        expect(resp.body).toEqual({items: [
+            {name: 'lollipop', price: 200}
+        ]});
     });
-  });
+});
 // end
 
 /** POST /items - create item from data; return `{item: item}` */
