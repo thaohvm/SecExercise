@@ -36,8 +36,6 @@ router.get('/:name', (req, res, next) => {
     }
 });
 
-module.exports = router;
-
 router.patch('/:name', (req, res, next) => {
     let requestedItem = items.find(item => item.name === req.params.name);
     try {
@@ -46,9 +44,25 @@ router.patch('/:name', (req, res, next) => {
         } else {
             requestedItem.name = req.body.name;
             requestedItem.price = req.body.price;
-            return res.json
+            return res.json({ updated: req.body })
         }
     } catch(e) {
         return next(e)
     }
 })
+
+router.delete('/:name', (req, res, next) => {
+    let itemIndex = items.findIndex(item => item.name === req.params.name);
+    try {
+        if (itemIndex === -1)  {
+            throw new ExpressError("Item is not exist!", 404);
+        } else {
+            items.splice(itemIndex, 1)
+            return res.json({ message: "deleted" });
+        }
+    } catch(e) {
+        return next(e);
+    }
+})
+
+module.exports = router;
