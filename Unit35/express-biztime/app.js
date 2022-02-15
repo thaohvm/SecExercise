@@ -8,6 +8,12 @@ const ExpressError = require("./expressError")
 
 app.use(express.json());
 
+const companyRoutes = require("./routes/companies");
+
+// Routes
+
+app.use('/companies',companyRoutes);
+
 
 /** 404 handler */
 
