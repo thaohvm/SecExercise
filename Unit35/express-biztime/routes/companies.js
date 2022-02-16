@@ -64,6 +64,22 @@ router.patch('/:code', async (req, res, next) => {
     }
 })
 
+router.delete('/:code', async (req, res, next) => {
+    try {
+        let code = req.params.code;
+
+        const results = await db.query(`DELETE FROM companies
+            WHERE code = $1
+            RETURNING code`,[code]);
+
+        if (results.rows.length == 0) {
+            throw new ExpressError(`Cannot delete companies ${code}`, 404)
+        }
+        return res.json({"status": "deleted"});
+    } catch (err) {
+        return next(err);
+    }
+})
 
 // Export
 module.exports = router;
