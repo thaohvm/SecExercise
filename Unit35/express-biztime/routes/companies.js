@@ -37,7 +37,7 @@ router.post('/', async (req,res,next) => {
             VALUES ($1, $2, $3)
             RETURNING code, name, description`, [code,name,description]);
         if (results.rows.length === 0 ) {
-            throw new ExpressError('Error creating resource', 404);
+            throw new ExpressError('Invalid data', 404);
         };
         return res.status(201).json({"company": results.rows[0]});
     } catch (err) {
@@ -45,6 +45,24 @@ router.post('/', async (req,res,next) => {
     };
 });
 
+router.patch('/:code', async (req, res, next) => {
+    try {
+        let code = req.params.code;
+        const { name, description } = req.body;
+
+        const results = await db.query(
+            `UPDATE companies SET name = $1, description = $2
+            WHERE code = $3
+            RETURNING name, description, code`,
+            [name, description, code]);
+        if (results.rows.length === 0) {
+            throw new ExpressError(`Could not update companies ${code}`, 404)
+        }
+        return res.json({companies: results.rows[0]});
+    } catch (err) {
+        return next(err);
+    }
+})
 
 
 // Export
