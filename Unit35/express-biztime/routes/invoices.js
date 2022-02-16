@@ -74,4 +74,61 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+router.put('/:id', async (req, res, next) => {
+    try {
+        let id = res.params.id;
+        let { amt, paid } = req.body;
+        let paidDate = null;
+
+        const currResults = await db.query(
+            `SELECT paid
+            FROM invoices
+            WHERE id= $1`,
+            [id]
+        );
+        if (currResults.rows.length === 0) {
+            throw new ExpressError(`Cannot update amt of invoice ${id}`, 404);
+        }
+
+        const currPaidDate = currResult.rows[0].paid_date;
+
+        if (!currPaidDate && paid) {
+            paidDate = new Date();
+        } else if (!paid) {
+            paidDate = null
+        } else {
+            paidDate = currPaidDate;
+        }
+
+        const results = await db.query(`
+        UPDATE invoice SET amt = $1, paid = $2, paid_date = $3
+        WHERE id = $4
+        RETURNING id, comp_code, amt, paid, add_date, paid_date`,
+            [amt, paid, paidDate, id]);
+
+        return res.json({ "invoice": results.rows[0] })
+    } catch (err) {
+        return next(err)
+    }
+})
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        let id = req.params.id;
+        const results = await db.query(`
+            DELETE FROM invoices
+            WHERE id = $1
+            RETURNING id`,
+            [id]);
+
+        if (results.rows.length === 0) {
+            throw new ExpressError(`Invoice ${id} cannot be deleted`, 404);
+        }
+        return res.json({ "status": "deleted" });
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 module.exports = router;
