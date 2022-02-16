@@ -53,8 +53,25 @@ router.get('/:id', async (req, res, next) => {
 
         return res.json({ "invoice": invoice });
     } catch (err) {
-    return next(err)
-}
+        return next(err)
+    }
+})
+
+router.post('/', async (req, res, next) => {
+    try {
+        const { comp_code, amt } = req.body;
+        const results = await db.query(`
+        INSERT INTO invoices (comp_code, amt)
+        VALUES ($1, $2)
+        RETURNING id, comp_code, amt, paid, add_date, paid_date`,
+            [comp_code, amt]);
+        if (results.rows.length === 0) {
+            throw new ExpressError(`Invalid data`, 404)
+        }
+        return res.json({ "invoice": results.rows[0] })
+    } catch (err) {
+        return next(err)
+    }
 })
 
 module.exports = router;
