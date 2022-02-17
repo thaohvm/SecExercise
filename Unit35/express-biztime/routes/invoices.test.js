@@ -9,20 +9,16 @@ let testCompany;
 
 beforeEach(async () => {
     const company = await db.query(`
-    INSERT INTO companies
-    (code, name, description)
-    VALUES ('amz', 'Amazon', 'AWS and Online Shopping')
-    RETURNING code, name, description`);
+    INSERT INTO companies (code, name, description)
+    VALUES ('apple', 'Apple', 'Maker of OSX.')
+           `);
     testCompany = company.rows[0];
 
-    const invoice = await db.query(`
-    INSERT INTO invoices
-    (comp_code, amt)
-    VALUES ('amz', 120)
-    RETURNING id, comp_code, amt, add_date, paid, paid_date`);
+    const invoice = await db.query(
+        `INSERT INTO invoices (comp_code, amt, paid, add_date, paid_date)
+           VALUES ('apple', 100, false, '2022-02-15T08:00:00.000Z', null)
+           RETURNING id`);
     testInvoice = invoice.rows[0];
-    testInvoice.add_date = new Date(testInvoice.add_date).toJSON();
-    testInvoice.company = testCompany;
 });
 
 afterEach(async () => {
@@ -41,27 +37,39 @@ describe('GET /invoices', () => {
     test('Get all invoices', async () => {
         const response = await request(app).get('/invoices');
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({invoices: [{id: testInvoice.id, comp_code: testInvoice.comp_code}]});
+        expect(response.body).toEqual({
+            invoices: [
+                {"id": testInvoice.id,
+                "comp_code": 'apple'}
+            ]
+        });
     });
 });
 
-// describe('GET /companies/:code', () => {
-//     test('Get a single company detail', async () => {
-//         const response = await request(app).get(`/companies/${testCompany.code}`);
-//         expect(response.statusCode).toEqual(200);
-//         expect(response.body).toEqual({
-//             company: {
-//                 code: testCompany.code,
-//                 name: testCompany.name,
-//                 description: testCompany.description
-//             }
-//         });
-//     })
-//     test('Response 404 if cant find company', async () => {
-//         const response = await request(app).get(`/companies/0`);
-//         expect(response.statusCode).toEqual(404);
-//     })
-// })
+describe('GET /invoices/:id', () => {
+    test('Gets invoice by id', async () => {
+        const response = await request(app).get(`/invoices/${testInvoice.id}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({
+            "invoice": {
+                "id": testInvoice.id,
+                "company": {
+                    "code": 'apple',
+                    "name": 'Apple',
+                    "description": 'Maker of OSX.'
+                },
+                "amt": 100,
+                "paid": false,
+                "add_date": "2022-02-15T08:00:00.000Z",
+                "paid_date": null
+            }
+        });
+    });
+    test('Response 404 if cant find company', async () => {
+        const response = await request(app).get(`/invoices/0`);
+        expect(response.statusCode).toEqual(404);
+    })
+})
 
 // describe('POST / companies', () => {
 //     test(`Create new company`, async () => {
