@@ -32,12 +32,13 @@ describe('GET /companies', () => {
         const response = await request(app).get('/companies');
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual(
-            {companies: [{
-                code: testCompany.code,
-                name: testCompany.name,
-                description: testCompany.description
-            }]
-        });
+            {
+                companies: [{
+                    code: testCompany.code,
+                    name: testCompany.name,
+                    description: testCompany.description
+                }]
+            });
     });
 });
 
@@ -62,12 +63,12 @@ describe('GET /companies/:code', () => {
 describe('POST / companies', () => {
     test(`Create new company`, async () => {
         const response = await request(app)
-        .post(`/companies`)
-        .send({
-            code: "apple",
-            name: "Apple Computer",
-            description: "Maker of OSX"
-        });
+            .post(`/companies`)
+            .send({
+                code: "apple",
+                name: "Apple Computer",
+                description: "Maker of OSX"
+            });
         expect(response.statusCode).toEqual(201);
         expect(response.body).toEqual({
             company: {
@@ -78,3 +79,35 @@ describe('POST / companies', () => {
         });
     });
 });
+
+describe(`PATCH /companies/:code`, () => {
+    test(`Updates part of info of a single company`, async () => {
+        const response = await request(app)
+            .patch(`/companies/amz`)
+            .send({ name: 'Amazon', description: 'NewDescrip' });
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toEqual({
+            company: {
+                code: 'amz',
+                name: 'Amazon',
+                description: 'NewDescrip'
+            }
+        });
+    });
+    test(`Response with 404 if cant find the company`, async () => {
+        const response = await request(app)
+            .patch(`/companies/notACompany`);
+        expect(response.statusCode).toEqual(404);
+    });
+});
+
+describe(`DELETE /companies/:code`, () => {
+    test(`Deletes a single company`, async () => {
+        const response = await request(app)
+        .delete(`/companies/amz`);
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toEqual({
+            status: "deleted"
+        });
+    });
+})

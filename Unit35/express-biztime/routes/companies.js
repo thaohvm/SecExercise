@@ -58,7 +58,7 @@ router.patch('/:code', async (req, res, next) => {
         if (results.rows.length === 0) {
             throw new ExpressError(`Could not update companies ${code}`, 404)
         }
-        return res.json({companies: results.rows[0]});
+        return res.json({company: results.rows[0]});
     } catch (err) {
         return next(err);
     }
