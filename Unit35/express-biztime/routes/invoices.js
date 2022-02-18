@@ -76,7 +76,7 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
     try {
-        let id = res.params.id;
+        let id = req.params.id;
         let { amt, paid } = req.body;
         let paidDate = null;
 
@@ -90,7 +90,7 @@ router.put('/:id', async (req, res, next) => {
             throw new ExpressError(`Cannot update amt of invoice ${id}`, 404);
         }
 
-        const currPaidDate = currResult.rows[0].paid_date;
+        const currPaidDate = currResults.rows[0].paid_date;
 
         if (!currPaidDate && paid) {
             paidDate = new Date();
@@ -101,12 +101,12 @@ router.put('/:id', async (req, res, next) => {
         }
 
         const results = await db.query(`
-        UPDATE invoice SET amt = $1, paid = $2, paid_date = $3
+        UPDATE invoices SET amt = $1, paid = $2, paid_date = $3
         WHERE id = $4
         RETURNING id, comp_code, amt, paid, add_date, paid_date`,
             [amt, paid, paidDate, id]);
 
-        return res.json({ "invoice": results.rows[0] })
+        return res.json({"invoice": results.rows[0] })
     } catch (err) {
         return next(err)
     }
