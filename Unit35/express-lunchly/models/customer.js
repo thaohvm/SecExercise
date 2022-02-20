@@ -84,8 +84,6 @@ class Customer {
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
-
-
 }
 
 module.exports = Customer;
