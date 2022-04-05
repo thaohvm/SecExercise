@@ -49,7 +49,7 @@ describe('quicksort', function () {
   it('should sort numbers in ascending order', function () {
     expect(quickSort([4, 20, 12, 10, 7, 9])).toEqual(
       [4, 7, 9, 10, 12, 20],
-      "quickSort([4, 20, 12, 10, 7, 9]) should equal [4, 7, 8, 10, 12, 20]"
+      "quickSort([4, 20, 12, 10, 7, 9]) should equal [4, 7, 9, 10, 12, 20]"
     );
     expect(quickSort([0, -10, 7, 4])).toEqual(
       [-10, 0, 4, 7],
