@@ -1,33 +1,27 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from "uuid";
-import NewTodoForm from './NewTodoForm';
 import Todo from './Todo';
+import NewTodoForm from './NewTodoForm';
 
 const TodoList = () => {
-    const [todos, setTodos] = useState([]);
-
-    const addTodo = () => {
-        let newTodo = {...todos, id: uuid() };
-        setTodos((todos) => [...todos, newTodo]);
+    const INIT_STATE = [
+        { id: 1, todo: "Design a prototype"},
+        { id: 2, todo: "Organize photo shoot"},
+    ]
+    const [todos, setTodos] = useState(INIT_STATE);
+    const addTodo = newTodo => {
+        setTodos(todos => [...todos, newTodo])
     };
-
-    const deleteTodo = (id) => {
-        setTodos((todos) => todos.filter((todo) => todo.id !== id));
-    };
-
-    const todoComponents = todos.map(({ id, task }) => (
-        <Todo
-        key={id}
-        id={id}
-        task={task}
-        deleteTodo={deleteTodo}
-        />
-    ));
-
+    const remove = (id) => {
+        setTodos(todos => todos.filter(todo => todo.id !== id));
+    }
     return (
         <div className='TodoList'>
+            <h3>Add new task</h3>
             <NewTodoForm addTodo={ addTodo }/>
-            <ul>{ todoComponents }</ul>
+            <h3>List Current Tasks: </h3>
+            {todos.map(({ id, todo }) => (
+                <Todo id={id} todo={todo} handleRemove={() => remove(id)}/>
+            ))}
         </div>
     )
 }

@@ -1,32 +1,34 @@
 import React, { useState } from 'react';
-import uuid from "uuid/v1";
+import uuid from "uuid/v4";
 
 const NewTodoForm = ({ addTodo }) => {
-    const INIT_STATE = "";
-    const [task, setTask] = useState(INIT_STATE);
-
+    const INIT_STATE = [
+        { todo: ""}
+    ]
+    const[formTodo, setFormTodo] = useState(INIT_STATE);
     const handleChange = (e) => {
-        setTask(e.target.value);
-    };
-
+        const { name, value } = e.target;
+        setFormTodo(formTodo => ({
+            ...formTodo,
+            [name] : value
+        }));
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        addTodo({ task, id: uuid() });
-        setTask(INIT_STATE);
+        addTodo({ ...formTodo, id: uuid})
+        setFormTodo(INIT_STATE);
     }
     return (
-        <div className='NewTodoForm'>
+        <div className='NewFormTodo'>
             <form onSubmit={handleSubmit}>
-                <label htmlFor='task'>Task: </label>
+                <label htmlFor='todo'>Enter new task: </label>
                 <input
                 type="text"
-                name="task"
-                id="task"
-                value={task}
+                name="todo"
+                value={formTodo.todo}
                 onChange={handleChange}
                 />
-
-                <button>Add new task</button>
+                <button onClick={handleSubmit}>Submit</button>
             </form>
         </div>
     )
