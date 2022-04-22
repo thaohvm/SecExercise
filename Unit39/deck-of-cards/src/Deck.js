@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from './Card';
+import {v4 as uuid} from 'uuid';
+import './Deck.css';
 
 const BASE_URL = "http://deckofcardsapi.com/api/deck/"
 
@@ -27,7 +29,7 @@ const Deck = () => {
             let cardImg = drawResult.data.cards[0].image;
             console.log(cardImg)
             const newCard =
-                <Card image={cardImg}/>;
+                <Card key={uuid()} image={cardImg}/>;
             setCards(cards => [...cards, newCard]);
         }
         catch (err) {
@@ -39,12 +41,12 @@ const Deck = () => {
         fetchNewCard();
     }
 
-
     return (
-        <div>
+        <div className='Deck'>
             <h3>DeckID: {deck ? deck : "Loading..."}</h3>
-            <button onClick={handleDraw}>GIMME A CARD!</button>
-            {cards}
+            <button onClick={handleDraw} className='Deck-gimme'>GIMME A CARD!</button>
+            <div className='Deck-cardarea'>{cards}</div>
+
         </div>
     )
 }
