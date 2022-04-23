@@ -14,3 +14,12 @@
 .Deck-cardarea {
     margin-top: 80px;
 }
+
+.Deck-autodraw {
+    padding: 15px;
+    background-color: teal;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    margin: 0 10px;
+}
