@@ -1,22 +1,14 @@
-import React from "react";
+import React from 'react';
 import { Link } from "react-router-dom";
-import Message from "./Message";
-import "./Sardines.css";
 
 function Sardines() {
-  return (
-    <div
-      className="Sardines"
-      style={{
-        backgroundImage:
-          "url(https://media.giphy.com/media/tVk4w6EZ7eGNq/giphy.gif)"
-      }}>
-      <Message>
-        <h1>you don't eat the sardines. the sardines, they eat you!</h1>
-        <h1><Link to="/">go back</Link></h1>
-      </Message>
-    </div>
-  );
+    return (
+        <div class="sardines">
+            <h3>YOU DON'T EAT THE SARDINES.</h3>
+            <h3>THE SARDINES EAT YOU!</h3>
+            <Link to="/">GO BACK</Link>
+        </div>
+    )
 }
 
 export default Sardines;

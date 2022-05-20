@@ -1,29 +1,31 @@
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React from 'react';
+import './App.css';
 
 import VendingMachine from "./VendingMachine";
-import Sardines from "./Sardines";
-import Chips from "./Chips";
 import Soda from "./Soda";
+import Chips from "./Chips";
+import Sardines from "./Sardines";
+
+import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact>
+    <div className="App">
+      <BrowserRouter>
+        <Route exact path="/">
           <VendingMachine />
         </Route>
-        <Route path="/soda" exact>
+        <Route exact path="/soda">
           <Soda />
         </Route>
-        <Route path="/chips" exact>
+        <Route exact path="/chips">
           <Chips />
         </Route>
-        <Route path="/sardines" exact>
+        <Route exact path="/sardines">
           <Sardines />
         </Route>
-      </Switch>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div>
   );
 }
 
