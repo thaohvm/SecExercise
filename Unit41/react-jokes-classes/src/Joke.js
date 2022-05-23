@@ -6,7 +6,7 @@ class Joke extends Component {
     super(props);
     this.upVote = this.upVote.bind(this);
     this.downVote = this.downVote.bind(this);
-  }
+   }
 
   upVote() {
     this.props.vote(this.props.id + 1);
