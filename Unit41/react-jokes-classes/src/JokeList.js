@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, Component } from "react";
 import axios from "axios";
 import Joke from "./Joke";
 import "./JokeList.css";
@@ -6,73 +6,44 @@ import "./JokeList.css";
 class JokeList extends Component {
   static defaultProps = {
     numJokesToGet: 10
-  };
-
+  }
   constructor(props) {
     super(props);
     this.state = {
       jokes: []
-    };
-
-    this.generateNewJokes = this.generateNewJokes.bind(this);
-    this.vote = this.vote.bind(this);
+    }
   }
 
-  /* at mount, get jokes */
-
-  componentDidMount() {
-    if (this.state.jokes.length < this.props.numJokesToGet) this.getJokes();
-  }
-
-  componentDidUpdate() {
-    if (this.state.jokes.length < this.props.numJokesToGet) this.getJokes();
-  }
-
-  /* retrieve jokes from API */
-
+  /* get jokes if there are no jokes */
   async getJokes() {
     try {
-      // load jokes one at a time, adding not-yet-seen jokes
       let jokes = this.state.jokes;
-      let jokeVotes = JSON.parse(
-        window.localStorage.getItem("jokeVotes") || "{}"
-      );
-      let seenJokes = new Set(jokes.map(j => j.id));
-
+      let seenJokes = new Set(jokes.map(joke => joke.id));
       while (jokes.length < this.props.numJokesToGet) {
         let res = await axios.get("https://icanhazdadjoke.com", {
           headers: { Accept: "application/json" }
         });
         let { status, ...joke } = res.data;
-
         if (!seenJokes.has(joke.id)) {
           seenJokes.add(joke.id);
-          jokeVotes[joke.id] = jokeVotes[joke.id] || 0;
-          jokes.push({ ...joke, votes: jokeVotes[joke.id] });
+          jokes.push({ ...joke, votes: 0 });
         } else {
-          console.log("duplicate found!");
+          console.log("dupplicate found!");
         }
       }
-
-      this.setState({ jokes });
-      window.localStorage.setItem("jokeVotes", JSON.stringify(jokeVotes));
     } catch (e) {
       console.log(e);
     }
   }
-
-  /* empty joke list, set to loading state, and then call getJokes */
+  /* empty joke list and then call getJokes */
 
   generateNewJokes() {
-    this.setState(() => ({ jokes: [] }));
+    this.setState(() => ({ jokes: [] }))
   }
 
   /* change vote for this id by delta (+1 or -1) */
 
   vote(id, delta) {
-    let jokeVotes = JSON.parse(window.localStorage.getItem("jokeVotes"));
-    jokeVotes[id] = (jokeVotes[id] || 0) + delta;
-    window.localStorage.setItem("jokeVotes", JSON.stringify(jokeVotes));
     this.setState(st => ({
       jokes: st.jokes.map(j =>
         j.id === id ? { ...j, votes: j.votes + delta } : j
@@ -82,13 +53,9 @@ class JokeList extends Component {
 
   render() {
     let sortedJokes = [...this.state.jokes].sort((a, b) => b.votes - a.votes);
-
-    return (
+      return (
       <div className="JokeList">
-        <button
-          className="JokeList-getmore"
-          onClick={this.generateNewJokes}
-        >
+        <button className="JokeList-getmore" onClick={this.generateNewJokes}>
           Get New Jokes
         </button>
 
@@ -98,14 +65,12 @@ class JokeList extends Component {
             key={j.id}
             id={j.id}
             votes={j.votes}
-            vote={this.vote}
-          />
+            vote={this.vote} />
         ))}
       </div>
     );
   }
 }
-
 
 // function JokeList({ numJokesToGet = 10 }) {
 //   const [jokes, setJokes] = useState([]);
